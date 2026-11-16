@@ -1,0 +1,48 @@
+name: Deploy music player
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build playlist.json from music folder
+        run: |
+          python3 - <<'EOF'
+          import json, os, urllib.parse
+          exts = {'.mp3', '.m4a', '.aac', '.wav', '.flac', '.mp4'}
+          items = []
+          for root, _, files in os.walk('music'):
+              for f in files:
+                  if os.path.splitext(f)[1].lower() in exts:
+                      p = os.path.join(root, f).replace(os.sep, '/')
+                      items.append({'name': f, 'path': urllib.parse.quote(p)})
+          items.sort(key=lambda x: x['name'].lower())
+          with open('playlist.json', 'w', encoding='utf-8') as fh:
+              json.dump(items, fh, ensure_ascii=False)
+          print(f'{len(items)} tracks')
+          EOF
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
