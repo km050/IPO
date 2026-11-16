@@ -8,80 +8,66 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="뮤직">
 <meta name="theme-color" content="#111114">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-180.png">
-<link rel="icon" href="icons/icon-192.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/icon-180.png">
+<link rel="icon" href="/icons/icon-192.png">
 <title>뮤직</title>
 <style>
-  :root {
-    --bg: #111114; --card: #1c1c21; --line: #2a2a31; --text: #f3f3f5;
-    --muted: #9a9aa5; --accent: #ff5a5f;
-  }
+  :root { --bg:#111114; --card:#1c1c21; --line:#2a2a31; --text:#f3f3f5; --muted:#9a9aa5; --accent:#ff5a5f; }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif; }
   body { display: flex; flex-direction: column; padding-top: env(safe-area-inset-top); }
-  header { padding: 14px 18px 8px; display: flex; align-items: center; gap: 10px; }
+  header { padding: 14px 18px 2px; display: flex; align-items: center; gap: 10px; }
   header h1 { font-size: 28px; margin: 0; flex: 1; letter-spacing: -0.5px; }
-  .iconbtn { background: var(--card); border: 0; color: var(--text); border-radius: 999px;
-    height: 38px; padding: 0 14px; font-size: 14px; font-weight: 600; }
+  .pc { padding: 0 18px 8px; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #1dd1a1; }
+  .dot.off { background: var(--accent); }
+  .iconbtn { background: var(--card); border: 0; color: var(--text); border-radius: 999px; height: 36px; padding: 0 14px; font-size: 14px; font-weight: 600; }
   .search { margin: 4px 18px 8px; }
   .search input { width: 100%; background: var(--card); border: 1px solid var(--line); color: var(--text);
     border-radius: 12px; padding: 11px 14px; font-size: 16px; outline: none; }
-  .tabs { display: flex; gap: 8px; padding: 0 18px 8px; }
-  .tab { background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 999px;
-    padding: 6px 14px; font-size: 14px; }
-  .tab.on { background: var(--text); color: var(--bg); border-color: var(--text); }
   main { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 210px; }
   ul { list-style: none; margin: 0; padding: 0; }
-  li { display: flex; align-items: center; gap: 12px; padding: 10px 18px; border-bottom: 1px solid var(--line); }
-  li .art { width: 44px; height: 44px; border-radius: 8px; flex: none; display: grid; place-items: center;
-    font-weight: 700; font-size: 18px; color: #fff; }
+  li { display: flex; align-items: center; gap: 12px; padding: 9px 18px; border-bottom: 1px solid var(--line); }
+  .art { width: 46px; height: 46px; border-radius: 8px; flex: none; display: grid; place-items: center;
+    font-weight: 700; font-size: 18px; color: #fff; background-size: cover; background-position: center; }
   li .meta { flex: 1; min-width: 0; }
-  li .t { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  li .a { font-size: 13px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .t { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .a { font-size: 13px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   li.playing .t { color: var(--accent); font-weight: 600; }
-  li .del { background: none; border: 0; color: var(--muted); font-size: 20px; padding: 4px 8px; }
   .empty { color: var(--muted); text-align: center; padding: 48px 28px; line-height: 1.6; font-size: 15px; }
   .player { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(28,28,33,.96);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--line);
     padding: 12px 18px calc(14px + env(safe-area-inset-bottom)); }
   .now { display: flex; align-items: center; gap: 12px; }
-  .now .art { width: 48px; height: 48px; border-radius: 10px; display: grid; place-items: center;
-    font-weight: 700; font-size: 20px; color: #fff; background: var(--line); flex: none; }
+  .now .art { width: 50px; height: 50px; border-radius: 10px; background-color: var(--line); }
   .now .meta { flex: 1; min-width: 0; }
-  .now .t { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .now .a { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .seek { display: flex; align-items: center; gap: 10px; margin: 10px 0 4px; font-size: 12px; color: var(--muted);
-    font-variant-numeric: tabular-nums; }
+  .now .t { font-weight: 600; }
+  .seek { display: flex; align-items: center; gap: 10px; margin: 10px 0 4px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
   input[type=range] { flex: 1; accent-color: var(--accent); height: 28px; }
   .ctrls { display: flex; justify-content: space-between; align-items: center; padding: 0 6px; }
-  .ctrls button { background: none; border: 0; color: var(--text); width: 52px; height: 52px; display: grid; place-items: center; }
+  .ctrls button { background: none; border: 0; color: var(--text); width: 52px; height: 52px; display: grid; place-items: center; position: relative; }
   .ctrls button svg { width: 28px; height: 28px; fill: currentColor; }
   .ctrls .play { width: 64px; height: 64px; border-radius: 50%; background: var(--text); color: var(--bg); }
   .ctrls .play svg { width: 30px; height: 30px; }
   .ctrls .mode { color: var(--muted); }
   .ctrls .mode.on { color: var(--accent); }
   .ctrls .mode svg { width: 22px; height: 22px; }
-  .badge { position: absolute; font-size: 9px; font-weight: 700; margin: 14px 0 0 18px; }
+  .badge { position: absolute; font-size: 9px; font-weight: 700; top: 30px; left: 34px; }
   .toast { position: fixed; left: 50%; top: calc(16px + env(safe-area-inset-top)); transform: translateX(-50%);
     background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-size: 14px;
-    font-weight: 600; opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 10; }
+    font-weight: 600; opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 10; white-space: nowrap; }
   .toast.show { opacity: 1; }
 </style>
 </head>
 <body>
 <header>
   <h1>뮤직</h1>
-  <button class="iconbtn" id="addBtn">＋ 폰에서 추가</button>
-  <input type="file" id="fileInput" accept="audio/*,.mp3,.m4a,.aac,.wav,.flac" multiple hidden>
+  <button class="iconbtn" id="rescanBtn">새로고침</button>
 </header>
-<div class="search"><input id="q" type="search" placeholder="노래, 가수 검색" autocomplete="off"></div>
-<div class="tabs">
-  <button class="tab on" data-src="all">전체</button>
-  <button class="tab" data-src="repo">PC에서 올린 곡</button>
-  <button class="tab" data-src="local">폰에 저장한 곡</button>
-</div>
+<div class="pc"><span class="dot" id="dot"></span><span id="pcName">PC 연결 중…</span></div>
+<div class="search"><input id="q" type="search" placeholder="노래, 가수, 앨범 검색" autocomplete="off"></div>
 <main><ul id="list"></ul><div class="empty" id="empty" hidden></div></main>
 
 <div class="player">
@@ -99,95 +85,79 @@
   </div>
 </div>
 <div class="toast" id="toast"></div>
-<audio id="audio" preload="metadata" playsinline></audio>
+<audio id="audio" preload="auto" playsinline></audio>
 
 <script>
 (() => {
   const $ = id => document.getElementById(id);
   const audio = $('audio');
-  const PLAY = '<path d="M8 5v14l11-7z"/>';
-  const PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+  const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
   const COLORS = ['#ff5a5f','#ff9f43','#feca57','#1dd1a1','#48dbfb','#54a0ff','#5f27cd','#c56cf0','#ff6b81','#10ac84'];
 
-  let tracks = [];        // {id, title, artist, src: 'repo'|'local', url?, blob?}
-  let filter = 'all';
-  let queue = [];         // ids in current play order
-  let current = null;     // id
-  let shuffle = load('shuffle', false);
-  let repeat = load('repeat', 'off'); // off | all | one
-  let objectUrl = null;
+  let tracks = [], queue = [], current = null;
+  let shuffle = load('shuffle', false), repeat = load('repeat', 'off');
 
   function load(k, d) { try { const v = localStorage.getItem('mp.' + k); return v === null ? d : JSON.parse(v); } catch { return d; } }
   function save(k, v) { try { localStorage.setItem('mp.' + k, JSON.stringify(v)); } catch {} }
-
-  function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 1800); }
-
-  function parseName(name) {
-    const base = name.replace(/\.[^.]+$/, '').replace(/_/g, ' ').trim();
-    const m = base.match(/^(.+?)\s+-\s+(.+)$/);
-    return m ? { artist: m[1].trim(), title: m[2].trim() } : { artist: '', title: base };
-  }
+  function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 1800); }
   function colorFor(s) { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0; return COLORS[h % COLORS.length]; }
   function fmt(s) { if (!isFinite(s)) return '0:00'; s = Math.floor(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  const byId = id => tracks.find(t => t.id === id);
 
-  // ---------- IndexedDB (songs saved on the phone) ----------
-  const DB = new Promise((res, rej) => {
-    const r = indexedDB.open('music-player', 1);
-    r.onupgradeneeded = () => r.result.createObjectStore('songs', { keyPath: 'id' });
-    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
-  });
-  async function dbAll() { const db = await DB; return new Promise((res, rej) => { const q = db.transaction('songs').objectStore('songs').getAll(); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }); }
-  async function dbPut(v) { const db = await DB; return new Promise((res, rej) => { const tx = db.transaction('songs', 'readwrite'); tx.objectStore('songs').put(v); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
-  async function dbDel(id) { const db = await DB; return new Promise((res, rej) => { const tx = db.transaction('songs', 'readwrite'); tx.objectStore('songs').delete(id); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
+  function paintArt(el, t) {
+    el.textContent = ''; el.style.backgroundImage = '';
+    el.style.backgroundColor = colorFor(t.album || t.title);
+    if (t.cover) el.style.backgroundImage = `url(/cover/${t.id})`;
+    else el.textContent = (t.title[0] || '♪').toUpperCase();
+  }
 
-  // ---------- Loading ----------
-  async function loadAll() {
-    let repo = [];
+  function setOnline(ok, name) {
+    $('dot').classList.toggle('off', !ok);
+    $('pcName').textContent = ok ? `${name} 에 연결됨 · ${tracks.length}곡` : 'PC에 연결할 수 없어요 — PC 프로그램과 Wi-Fi를 확인하세요';
+  }
+
+  async function loadTracks(showToast) {
     try {
-      const r = await fetch('playlist.json', { cache: 'no-cache' });
-      if (r.ok) repo = (await r.json()).map(f => ({ id: 'r:' + f.path, ...parseName(f.name), src: 'repo', url: f.path }));
-    } catch {}
-    let local = [];
-    try { local = (await dbAll()).map(s => ({ id: s.id, ...parseName(s.name), src: 'local', blob: s.blob })); } catch {}
-    tracks = [...repo, ...local].sort((a, b) => (a.artist + a.title).localeCompare(b.artist + b.title, 'ko'));
-    render();
-    const last = load('last', null);
-    if (!current && last && tracks.some(t => t.id === last)) select(last, false);
+      const r = await fetch('/api/tracks', { cache: 'no-store' });
+      if (r.status === 401) { location.href = '/'; return; }
+      const d = await r.json();
+      tracks = d.tracks;
+      setOnline(true, d.name);
+      render();
+      if (showToast) toast(tracks.length + '곡을 불러왔어요');
+      const last = load('last', null);
+      if (!current && last && byId(last)) select(last, false);
+    } catch { setOnline(false); }
   }
 
   function visible() {
     const q = $('q').value.trim().toLowerCase();
-    return tracks.filter(t => (filter === 'all' || t.src === filter) && (!q || (t.title + ' ' + t.artist).toLowerCase().includes(q)));
+    return q ? tracks.filter(t => (t.title + ' ' + t.artist + ' ' + t.album).toLowerCase().includes(q)) : tracks;
   }
 
   function render() {
     const list = $('list'), items = visible();
     list.innerHTML = '';
+    const frag = document.createDocumentFragment();
     for (const t of items) {
       const li = document.createElement('li');
       if (t.id === current) li.className = 'playing';
-      const art = document.createElement('div'); art.className = 'art'; art.style.background = colorFor(t.title); art.textContent = (t.title[0] || '♪').toUpperCase();
+      const art = document.createElement('div'); art.className = 'art'; art.loading = 'lazy'; paintArt(art, t);
       const meta = document.createElement('div'); meta.className = 'meta';
       const ti = document.createElement('div'); ti.className = 't'; ti.textContent = t.title;
-      const ar = document.createElement('div'); ar.className = 'a'; ar.textContent = (t.artist || '알 수 없는 가수') + (t.src === 'local' ? ' · 폰' : '');
+      const ar = document.createElement('div'); ar.className = 'a';
+      ar.textContent = [t.artist || '알 수 없는 가수', t.album].filter(Boolean).join(' · ');
       meta.append(ti, ar); li.append(art, meta);
-      if (t.src === 'local') {
-        const d = document.createElement('button'); d.className = 'del'; d.textContent = '✕'; d.setAttribute('aria-label', '삭제');
-        d.onclick = async e => { e.stopPropagation(); if (!confirm(`'${t.title}'을(를) 폰에서 삭제할까요?`)) return; await dbDel(t.id); if (current === t.id) stop(); loadAll(); };
-        li.append(d);
-      }
       li.onclick = () => { buildQueue(t.id); select(t.id, true); };
-      list.append(li);
+      frag.append(li);
     }
+    list.append(frag);
     const empty = $('empty');
-    if (!items.length) {
-      empty.hidden = false;
-      empty.innerHTML = tracks.length ? '검색 결과가 없어요.' :
-        '아직 곡이 없어요.<br><br><b>PC(Windows)에서:</b> GitHub 저장소의 <b>music</b> 폴더에 음악 파일을 끌어다 놓으면 1~2분 뒤 여기에 나타나요.<br><br><b>폰에서:</b> 오른쪽 위 <b>＋ 폰에서 추가</b>로 파일 앱의 음악을 넣을 수 있어요.';
-    } else empty.hidden = true;
+    empty.hidden = !!items.length;
+    if (!items.length) empty.innerHTML = tracks.length ? '검색 결과가 없어요.' :
+      'PC 음악 폴더에 곡이 없어요.<br>PC 프로그램에서 음악 폴더를 확인한 뒤<br><b>새로고침</b>을 눌러주세요.';
   }
 
-  // ---------- Playback ----------
   function buildQueue(startId) {
     const ids = visible().map(t => t.id);
     if (shuffle) {
@@ -198,26 +168,21 @@
   }
 
   function select(id, autoplay) {
-    const t = tracks.find(x => x.id === id); if (!t) return;
+    const t = byId(id); if (!t) return;
     current = id; save('last', id);
     if (!queue.includes(id)) buildQueue(id);
-    if (objectUrl) { URL.revokeObjectURL(objectUrl); objectUrl = null; }
-    if (t.src === 'local') { objectUrl = URL.createObjectURL(t.blob); audio.src = objectUrl; }
-    else audio.src = t.url;
+    audio.src = '/stream/' + id;
     $('nowTitle').textContent = t.title;
-    $('nowArtist').textContent = t.artist || '알 수 없는 가수';
-    $('nowArt').textContent = (t.title[0] || '♪').toUpperCase();
-    $('nowArt').style.background = colorFor(t.title);
+    $('nowArtist').textContent = [t.artist || '알 수 없는 가수', t.album].filter(Boolean).join(' · ');
+    paintArt($('nowArt'), t);
     document.title = t.title + ' · 뮤직';
     if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({ title: t.title, artist: t.artist || '', album: '뮤직',
-        artwork: [{ src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' }] });
+      const art = t.cover ? [{ src: '/cover/' + t.id, sizes: '512x512' }] : [{ src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' }];
+      navigator.mediaSession.metadata = new MediaMetadata({ title: t.title, artist: t.artist || '', album: t.album || '', artwork: art });
     }
     render();
     if (autoplay) audio.play().catch(() => {});
   }
-
-  function stop() { audio.pause(); audio.removeAttribute('src'); audio.load(); current = null; $('nowTitle').textContent = '재생할 곡을 고르세요'; $('nowArtist').innerHTML = '&nbsp;'; }
 
   function step(dir, fromEnd) {
     if (!queue.length) { const v = visible(); if (!v.length) return; buildQueue(v[0].id); return select(queue[0], true); }
@@ -228,14 +193,14 @@
   }
 
   function togglePlay() {
-    if (!current) { const v = visible(); if (!v.length) return toast('먼저 곡을 추가하세요'); buildQueue(v[0].id); return select(queue[0], true); }
+    if (!current) { const v = visible(); if (!v.length) return toast('재생할 곡이 없어요'); buildQueue(v[0].id); return select(queue[0], true); }
     audio.paused ? audio.play().catch(() => {}) : audio.pause();
   }
 
   audio.addEventListener('play', () => { $('playIcon').innerHTML = PAUSE; if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; });
   audio.addEventListener('pause', () => { $('playIcon').innerHTML = PLAY; if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; });
   audio.addEventListener('ended', () => { if (repeat === 'one') { audio.currentTime = 0; audio.play(); } else step(1, true); });
-  audio.addEventListener('error', () => { if (current) toast('이 파일은 재생할 수 없어요'); });
+  audio.addEventListener('error', () => { if (current) { toast('재생할 수 없어요 — PC 연결을 확인하세요'); loadTracks(false); } });
 
   let seeking = false;
   audio.addEventListener('timeupdate', () => {
@@ -270,25 +235,13 @@
     try { ms.setActionHandler('seekto', d => { audio.currentTime = d.seekTime; }); } catch {}
   }
 
-  // ---------- UI ----------
   $('q').addEventListener('input', render);
-  document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('on')); b.classList.add('on'); filter = b.dataset.src; render();
-  });
-  $('addBtn').onclick = () => $('fileInput').click();
-  $('fileInput').onchange = async e => {
-    const files = [...e.target.files]; if (!files.length) return;
-    let n = 0;
-    for (const f of files) {
-      try { await dbPut({ id: 'l:' + f.name + ':' + f.size, name: f.name, blob: f }); n++; } catch { toast('저장 공간이 부족해요'); break; }
-    }
-    e.target.value = '';
-    toast(n + '곡을 폰에 저장했어요');
-    loadAll();
+  $('rescanBtn').onclick = async () => {
+    try { await fetch('/api/rescan', { method: 'POST' }); } catch {}
+    loadTracks(true);
   };
-
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
-  loadAll();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) loadTracks(false); });
+  loadTracks(false);
 })();
 </script>
 </body>
